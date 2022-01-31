@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 project ("thermostat")
 
 # Add source to this project's executable.
-add_executable (thermostat "thermostat.cpp" "thermostat.h")
+add_executable (thermostat "src/thermostat.cpp" "src/thermostat.h" "src/sqlhelper/sqlhelper.cpp" "src/sqlhelper/sqlhelper.h" "src/main.cpp")
 
 # TODO: Add tests and install targets if needed.
 #sqlite packages
