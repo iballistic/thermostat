@@ -46,6 +46,11 @@ int SQLHelper::run_query(const char* query) {
     const char* tail{ nullptr };
     const char* error{ nullptr };
 
+    if (this->db == nullptr) {
+        throw "Not connected to a db. Must call connect method first.";
+        return -1;
+    }
+
     return_code = sqlite3_prepare_v2(db, query, -1, &statement, &tail);
     #ifdef DEBUG
         cout << "sqlite3_prepare_v2: return code: " << return_code << endl;

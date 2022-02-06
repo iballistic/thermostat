@@ -3,16 +3,19 @@
 
 #pragma once
 
-#include <ctime>
-#include <iostream>
-#include <format>
-#include <string>
-#include <string_view>
-#include <cpprest/filestream.h>
-#include <cpprest/http_client.h>
-#include <cpprest/uri.h>
-#include <cpprest/json.h>
+#include<ctime>
+#include<iostream>
+#include<format>
+#include<string>
+#include<xstring>
+#include<string_view>
+#include<vector>
+#include<cpprest/filestream.h>
+#include<cpprest/http_client.h>
+#include<cpprest/uri.h>
+#include<cpprest/json.h>
 
+#include"runtime.h"
 
 typedef web::json::value JsonValue;
 typedef web::json::value::value_type JsonValueType;
@@ -23,43 +26,23 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 using namespace concurrency::streams;
+using std::wstring;
 
 
-public class Thermostat
+class Thermostat
 {
 public:
 	Thermostat();
+    Thermostat(const wstring uri, const wstring username, const wstring password, const bool requireValidCert);
 	~Thermostat();
-	void getRuntimes();
-	HttpClientConfig clientConfig(string proxyServer = nullptr)
-	void 
+	std::vector<Runtime> getRuntimes();
+
 
 private:
+    std::wstring username = L"";
+    std::wstring password = L"";
+    std::wstring uri = L"";
+    bool requireValidCert = true;
+    HttpClientConfig prepareClientConfig();
 
 };
-
-Thermostat::Thermostat()
-{
-}
-
-Thermostat::getRuntimes() {
-
-}
-
-HttpClientConfig clientConfig(wchar_t username = nullptr, wchar_t password = nullptr, bool requireValidCert = true)
-{
-    HttpClientConfig client_config;
-	if (username != nullptr && password != nullptr) {
-		credentials creds(username, password);
-		client_config.set_credentials(creds);
-	}
-
-    client_config.set_validate_certificates(requireValidCert);
-
-    return client_config;
-}
-
-
-Thermostat::~Thermostat()
-{
-}

@@ -1,16 +1,22 @@
 ﻿# CMakeList.txt : CMake project for thermostat, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.20)
 
 project ("thermostat")
 
+# https://cmake.org/cmake/help/latest/prop_tgt/CXX_STANDARD.html
+# https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version?view=msvc-170
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+
 # Add source to this project's executable.
-add_executable (thermostat "src/thermostat.cpp" "src/thermostat.h" "src/sqlhelper/sqlhelper.cpp" "src/sqlhelper/sqlhelper.h" "src/main.cpp")
+add_executable (thermostat "src/thermostat.cpp" "src/thermostat.h" "src/sqlhelper/sqlhelper.cpp" "src/sqlhelper/sqlhelper.h" "src/main.cpp" "src/runtimes.h")
 
 # TODO: Add tests and install targets if needed.
 #sqlite packages
- find_package(unofficial-sqlite3 CONFIG REQUIRED)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(thermostat PRIVATE unofficial::sqlite3::sqlite3)
 
 #curl packages
