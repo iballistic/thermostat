@@ -6,9 +6,6 @@
 //http://www.atakansarioglu.com/easy-quick-start-cplusplus-rest-client-example-cpprest-tutorial/
 //https://github.com/microsoft/cpprestsdk/wiki/Getting-Started-Tutorial
 //https://en.cppreference.com/w/cpp/chrono/c/time
-Thermostat::Thermostat()
-{
-};
 
 Thermostat::Thermostat(const wstring uri, const wstring username, const  wstring password, const bool requireValidCert = true)
 {
@@ -66,12 +63,12 @@ std::vector<Runtime> Thermostat::getRuntimes() {
                     auto heat2 = runtime.at(L"heat2").as_number();
                     auto ts = runtime.at(L"ts").as_number();
 
-                    time_t ts_t = ts.to_int64();
-                    auto timeinfo = localtime(&ts_t);
-                    auto ts_current = std::time(nullptr);
-                    auto diff_result = std::difftime(ts_current, ts_t);
+                    time_t ts_input = ts.to_int64();
+                    time_t ts_current = std::time(nullptr);
+                    auto diff_result = std::difftime(ts_current, ts_input);
 #ifdef DEBUG
-                    std::cout << "Time stamp: " << ts.to_int64() << ": " << std::asctime(timeinfo) << std::endl;
+                    auto timeinfo = localtime(&ts_input);
+                    std::cout << "Time stamp: " << ts_input << ": " << std::asctime(timeinfo) << std::endl;
                     std::cout << std::asctime(timeinfo);
                     std::cout << "diff result " << diff_result << std::endl;
 #endif // DEBUG  

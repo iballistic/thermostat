@@ -12,10 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
 # Add source to this project's executable.
-add_executable (Thermostat "src/main.cpp")
+add_executable (Thermostat "src/main.cpp" "src/schema.h")
 
 #Venstart REST Client
-add_library(VenstarRestClient "src/venstar/thermostat.cpp")
+add_library(VenstarRestClient "src/venstar/thermostat.h" "src/venstar/thermostat.cpp")
 target_link_libraries(Thermostat PUBLIC VenstarRestClient)
 target_include_directories(Thermostat PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/venstar")
 
@@ -24,6 +24,11 @@ target_include_directories(Thermostat PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_
 add_library(SQLHelper "src/sqlhelper/sqlhelper.cpp")
 target_link_libraries(Thermostat PUBLIC SQLHelper)
 target_include_directories(Thermostat PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/sqlhelper")
+
+# weather Helper Library
+add_library(WeatherRestClient "src/weather/weatherprovider.h" "src/weather/darksky.h" "src/weather/darksky.cpp")
+target_link_libraries(Thermostat PUBLIC WeatherRestClient)
+target_include_directories(Thermostat PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/weather")
 
 # TODO: Add tests and install targets if needed.
 #sqlite packages

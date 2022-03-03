@@ -1,6 +1,3 @@
-﻿// thermostat.h : Include file for standard system include files,
-// or project specific include files.
-
 #pragma once
 
 #include<ctime>
@@ -15,7 +12,6 @@
 #include<cpprest/uri.h>
 #include<cpprest/json.h>
 
-#include"runtime.h"
 
 typedef web::json::value JsonValue;
 typedef web::json::value::value_type JsonValueType;
@@ -28,20 +24,16 @@ using namespace web::http::client;
 using namespace concurrency::streams;
 using std::wstring;
 
+#include"weatherprovider.h"
 
-class Thermostat
-{
-public:
-    Thermostat(const wstring uri, const wstring username, const wstring password, const bool requireValidCert);
-	~Thermostat();
-	std::vector<Runtime> getRuntimes();
+namespace Weather {
 
+	class DarkSky : public ProviderAPI {
 
-private:
-    std::wstring username = L"";
-    std::wstring password = L"";
-    std::wstring uri = L"";
-    bool requireValidCert = true;
-    HttpClientConfig prepareClientConfig();
+	public:
+		DarkSky(const std::wstring apiKey) : ProviderAPI(apiKey) {};
+		WeatherStruct getWeather(double latitude, double longitude);
+
+	};
 
 };
