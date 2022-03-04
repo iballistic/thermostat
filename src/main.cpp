@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
 
 	int result = 0;
 	Weather::DarkSky weather = Weather::DarkSky(L"694130becabc99d29f1e55aac65d5cf6");
+	weather.setUnit(Weather::MeasurementUnit::METRIC);
 	auto weatherData = weather.getWeather(51.213654, -114.288212);
 
 
