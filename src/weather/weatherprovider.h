@@ -3,18 +3,31 @@
 
 namespace Weather {
 
+    enum class MeasurementUnit :char
+    {
+        METRIC = 'm', IMPERIAL = 'i'
+    };
+
     struct WeatherStruct {
 
-        double temperatureLow = 0;
-        double temperatureHigh = 0;
-        double temperatureCurrent = 0;
-        double humidity = 0;
-        double pressure = 0;
-        double windSpeed = 0;
-        time_t localTime = 0;
+        double temperatureLow = { 0 };
+        double temperatureHigh = { 0 };
+        double temperatureCurrent = { 0 };
+        double humidity = { 0 };
+        double pressure = { 0 };
+        double windSpeed = { 0 };
+        time_t dateTime = { 0 };
+        MeasurementUnit unit = { MeasurementUnit::METRIC };
+
+        std::string timestampToString() {
+            auto timeinfo = localtime(&dateTime);
+            return std::asctime(timeinfo);
+        }
     };
 
 };
+
+
 
 namespace Weather {
     class ProviderAPI {
@@ -23,6 +36,7 @@ namespace Weather {
 
         ProviderAPI(const std::wstring  key) {
             setApiKey(key);
+            setUnit();
         };
         virtual WeatherStruct getWeather(double latitude, double longitude) = 0;
         /// <summary>
@@ -56,9 +70,27 @@ namespace Weather {
 
             return this->apiKey;
         };
+
+        /// <summary>
+        /// Set measurement unit
+        /// </summary>
+        /// <param name="unit"></param>
+        void setUnit(MeasurementUnit unit=MeasurementUnit::METRIC) {
+            this->apiUnit = unit;
+        };
+
+        /// <summary>
+        /// Return measurement unit 
+        /// </summary>
+        /// <returns></returns>
+        MeasurementUnit getUnit() {
+            return this->apiUnit;
+        }
+
     private:
         std::wstring apiKey;
         std::wstring lastErrorMessage;
+        MeasurementUnit apiUnit;
 
 
     };

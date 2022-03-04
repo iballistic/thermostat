@@ -71,7 +71,7 @@ int SQLHelper::run_query(const char* query) {
 
     if (return_code != SQLITE_OK && return_code!=SQLITE_DONE) {
         error = sqlite3_errmsg(db);
-        cerr << "Error: " << *error << endl;
+        cerr << "Error: " << *error << " Return code: " << return_code << std::endl;
         return 1;
     }
     //Destroy A Prepared Statement Object

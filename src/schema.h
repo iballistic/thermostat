@@ -3,11 +3,16 @@
 #include<cstdio>
 #include<string>
 
+
+//for reporting
+//SELECT strftime('%Y-%m-%d', datetime(timestamp, 'unixepoch')) as date FROM weather_staging;
+//SELECT strftime('%Y-%m-%d', datetime(timestamp, 'unixepoch')) as date FROM runtimes;
+//https://www.sqlite.org/lang_datefunc.html
 namespace Database {
 	namespace Transaction {
 
-		const std::string begin = "BEGIN TRANSACTION;";
-		const std::string commit = "COMMIT;";
+		const std::string begin = {R"(BEGIN TRANSACTION;)"};
+		const std::string commit = { R"(COMMIT;)"};
 
 	}
 	namespace TableCreate {
@@ -39,7 +44,8 @@ namespace Database {
 			[humidity] REAL,
 			[pressure] REAL,
 			[windspeed] REAL,
-			[timestamp_string]	TEXT
+			[timestamp_string]	TEXT,
+			[unit]	TEXT
 			);)" };
 
 
@@ -52,14 +58,33 @@ namespace Database {
 			[humidity] REAL,
 			[pressure] REAL,
 			[windspeed] REAL,
-			[timestamp_string]	TEXT
+			[timestamp_string]	TEXT,
+			[unit]	TEXT
 			);)" };
 	};
 
 	namespace TableDataInsert {
 
-		const std::string runtimesStaging = "insert into [runtimes_staging] ([timestamp],[heat1],[heat2],[timestamp_string])\
-     VALUES ('{}','{}','{}','{}');\n";
+		const std::string runtimesStaging = {
+			R"(insert into [runtimes_staging] (
+			[timestamp],
+			[heat1],
+			[heat2],
+			[timestamp_string]
+			) VALUES ('{}','{}','{}','{}');)"
+		};
+
+		const std::string weatherStaging = {
+		R"(insert into [weather_staging] (
+		[timestamp],
+		[current],
+		[low],
+		[high],
+		[humidity],
+		[pressure],
+		[windspeed],
+		[timestamp_string],
+		[unit]) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}', '{}');)" };
 	};
 
 	namespace TableDataMerge {
@@ -77,13 +102,38 @@ namespace Database {
 					t1.[heat2],
 					t1.[timestamp_string] from runtimes_staging  as t1 
 					left join [runtimes]  as t2 on t1.[timestamp] = t2.[timestamp]
-					where t2.[timestamp] is null)"
-		};
+					where t2.[timestamp] is null)"};
+
+		const std::string weather = { R"(insert into weather (
+				[timestamp],
+				[current],
+				[low],
+				[high],
+				[humidity],
+				[pressure],
+				[windspeed],
+				[timestamp_string],
+				[unit]
+				)
+				select distinct
+				t1.[timestamp],
+				t1.[current],
+				t1.[low],
+				t1.[high],
+				t1.[humidity],
+				t1.[pressure],
+				t1.[windspeed],
+				t1.[timestamp_string],
+				t1.[unit]
+				from weather_staging  as t1 
+				left join [weather]  as t2 on t1.[timestamp] = t2.[timestamp]
+				where t2.[timestamp] is null)"};
 	};
 
 	namespace TableDataDelete {
 
 		const std::string runtimesStaging = { R"(delete from runtimes_staging)" };
+		const std::string weatherStaging = { R"(delete from weather_staging)" };
 	};
 };
 
