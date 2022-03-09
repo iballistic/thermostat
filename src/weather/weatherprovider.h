@@ -1,6 +1,8 @@
+#pragma once
+
 #include<iostream>
 #include<cstdio>
-
+#include"utils.h"
 namespace Weather {
 
     enum class MeasurementUnit :char
@@ -20,8 +22,10 @@ namespace Weather {
         MeasurementUnit unit = { MeasurementUnit::METRIC };
 
         std::string timestampToString() {
-            auto timeinfo = localtime(&dateTime);
-            return std::asctime(timeinfo);
+            auto result = Utils::TimeUtil::datetimeToString(dateTime);
+            auto errorCode = std::get<0>(result);
+            auto timeinfo = std::get<1>(result);
+            return timeinfo;
         }
     };
 

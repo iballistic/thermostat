@@ -1,3 +1,5 @@
+#pragma once
+
 #include<cstdio>
 #include<iostream>
 #include<string>
@@ -6,9 +8,10 @@
 
 namespace Utils {
 
-	namespace TimeUtil {
+	class TimeUtil {
 
-      std::tuple<errno_t, std::string> datetimeToString(time_t dateTime=0) {
+    public:
+      static std::tuple<errno_t, std::string> datetimeToString(time_t dateTime=0) {
             auto timeinfo = localtime(&dateTime);
             const size_t bufferSize = 32;
             char buffer[bufferSize];
@@ -18,10 +21,10 @@ namespace Utils {
             error = asctime_s(buffer, bufferSize, timeinfo);
             if (error) {
                
-                return std::make_tuple(errno, "");
+                return std::make_tuple(error, "");
             }
 
-            return std::make_tuple(errno, buffer);
+            return std::make_tuple(error, buffer);
 
         }
 	};

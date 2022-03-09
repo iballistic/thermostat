@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
 			runtime.timestamp,
 			runtime.heat1,
 			runtime.heat2,
-			runtime.timestamp_tostrig())
+			runtime.timestampToString())
 		);
 	}
 
