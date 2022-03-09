@@ -27,6 +27,7 @@ find_package(CURL CONFIG REQUIRED)
 target_link_libraries(thermostat PRIVATE CURL::libcurl)
 ```
 
+mkdir "out"
 cd "out"
 mdkir "build"
 cmake -B build -S .. -DCMAKE_TOOLCHAIN_FILE=d:\gitrepos\vcpkg\scripts\buildsystems\vcpkg.cmake

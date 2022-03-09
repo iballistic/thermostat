@@ -1,22 +1,25 @@
 ﻿# CMakeList.txt : CMake project for thermostat, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.20)
 
-project ("thermostat")
+project (THERMOSTAT VERSION 1.0)
+
+# https://cmake.org/cmake/help/latest/prop_tgt/CXX_STANDARD.html
+# https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version?view=msvc-170
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+
+add_subdirectory(src/utils)
+add_subdirectory(src/venstar)
+add_subdirectory(src/weather)
+add_subdirectory(src/sqlhelper)
 
 # Add source to this project's executable.
-add_executable (thermostat "thermostat.cpp" "thermostat.h")
+add_executable (Thermostat "src/main.cpp" "src/schema.h")
 
-# TODO: Add tests and install targets if needed.
-#sqlite packages
- find_package(unofficial-sqlite3 CONFIG REQUIRED)
-target_link_libraries(thermostat PRIVATE unofficial::sqlite3::sqlite3)
-
-#curl packages
-
-find_package(CURL CONFIG REQUIRED)
-target_link_libraries(thermostat PRIVATE CURL::libcurl)
-
-find_package(cpprestsdk CONFIG REQUIRED)
-target_link_libraries(thermostat PRIVATE cpprestsdk::cpprest cpprestsdk::cpprestsdk_zlib_internal cpprestsdk::cpprestsdk_brotli_internal)
+target_link_libraries(Thermostat PUBLIC Utils)
+target_link_libraries(Thermostat PUBLIC VenstarRestClient)
+target_link_libraries(Thermostat PUBLIC WeatherRestClient)
+target_link_libraries(Thermostat PUBLIC SQLHelper)
