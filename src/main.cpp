@@ -15,10 +15,37 @@
 //int main();
 //int main(int argc, char* argv[]);
 
-int main(int argc, char* argv[]) {
+
+void showUsage(const char* programName) {
+	std::cerr << std::format("Usage: {} -key <Weather API Key>", programName) << std::endl;
+}
+
+int wmain(int argc, wchar_t* argv[]) {
+
+	char programName[256];
+	//https://www.cplusplus.com/reference/cstdlib/wcstombs/
+	std::wcstombs(programName, argv[0], sizeof(programName));
+
+	if (argc < 3) {
+		showUsage(programName);
+		return 1;
+	}
+
+	std::wstring apiKey{};
+
+
+	for (size_t i = 1; i < argc; i++) {
+		if (std::wstring(argv[i]) == L"-h") {
+			showUsage(programName);
+			return 1;
+		}else if (std::wstring(argv[i]) == L"-key"){
+			apiKey = std::wstring(argv[++i]);
+		}
+	}
 
 	int result = 0;
-	Weather::DarkSky weather = Weather::DarkSky(L"694130becabc99d29f1e55aac65d5cf6");
+	Weather::DarkSky weather = Weather::DarkSky(apiKey);
+	//Weather::DarkSky weather = Weather::DarkSky(L"694130becabc99d29f1e55aac65d5cf6");
 	weather.setUnit(Weather::MeasurementUnit::METRIC);
 	auto weatherData = weather.getWeather(51.213654, -114.288212);
 
@@ -29,8 +56,11 @@ int main(int argc, char* argv[]) {
 	//strcpy_s(buf, 16, "Start");
 	//strcat_s(buf, 16, " End");               // Correct
 	//strcat_s(buf, 16 – strlen(buf), " End"); // Incorrect
+	// 
+	//const wstring programName = std::wstring(argv[0]);
+
 	char databaseName[256] = { 0 };
-	strcat_s(databaseName, sizeof(databaseName), argv[0]);
+	strcat_s(databaseName, sizeof(databaseName), programName);
 	strcat_s(databaseName, sizeof(databaseName), ".db");
 
 
