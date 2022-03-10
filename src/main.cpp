@@ -19,7 +19,7 @@
 void showUsage(const char* programName) {
 	std::cerr << std::format("Usage: {}", programName) << std::endl;
 	std::cerr << " -key <Weather API Key> e.g  -key 123456789abcdef" << std::endl;
-	std::cerr << " -tu <Thermostat Base Url> e.g -tu http ://192.168.0.2" << std::endl;
+	std::cerr << " -tu <Thermostat Base Url> e.g -tu https ://192.168.0.237" << std::endl;
 }
 
 int wmain(int argc, wchar_t* argv[]) {
