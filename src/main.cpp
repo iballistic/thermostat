@@ -17,21 +17,27 @@
 
 
 void showUsage(const char* programName) {
-	std::cerr << std::format("Usage: {} -key <Weather API Key>", programName) << std::endl;
+	std::cerr << std::format("Usage: {}", programName) << std::endl;
+	std::cerr << " -key <Weather API Key> e.g  -key 123456789abcdef" << std::endl;
+	std::cerr << " -tu <Thermostat Base Url> e.g -tu http ://192.168.0.2" << std::endl;
 }
 
 int wmain(int argc, wchar_t* argv[]) {
 
 	char programName[256];
 	//https://www.cplusplus.com/reference/cstdlib/wcstombs/
+	//https://en.cppreference.com/w/cpp/string/multibyte/mbsrtowcs
+	//https://docs.microsoft.com/en-us/cpp/dotnet/how-to-convert-system-string-to-wchar-t-star-or-char-star?view=msvc-170
 	std::wcstombs(programName, argv[0], sizeof(programName));
 
-	if (argc < 3) {
+	if (argc <= 3) {
 		showUsage(programName);
 		return 1;
 	}
 
 	std::wstring apiKey{};
+	std::wstring baseURL{};
+	
 
 
 	for (size_t i = 1; i < argc; i++) {
@@ -40,6 +46,9 @@ int wmain(int argc, wchar_t* argv[]) {
 			return 1;
 		}else if (std::wstring(argv[i]) == L"-key"){
 			apiKey = std::wstring(argv[++i]);
+		}
+		else if (std::wstring(argv[i]) == L"-tu") {
+			baseURL = std::wstring(argv[++i]);
 		}
 	}
 
@@ -98,7 +107,8 @@ int wmain(int argc, wchar_t* argv[]) {
 
 
 	//Fetch thermostat data and update database
-	Thermostat thermo = Thermostat(L"https://192.168.0.237/query/runtimes", L"THERMO", L"THERMO", false);
+	baseURL.append(L"/query/runtimes");
+	Thermostat thermo = Thermostat(baseURL, L"THERMO", L"THERMO", false);
 	auto runtimes = thermo.getRuntimes();
 	sqlHelper->run_query(Database::Transaction::begin);
 	for (auto runtime : runtimes) {
