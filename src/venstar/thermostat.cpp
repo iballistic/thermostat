@@ -35,7 +35,7 @@ std::vector<Runtime> Thermostat::getRuntimes() {
 
             return response.extract_json(true);
         }
-            })
+       })
 
 
 
